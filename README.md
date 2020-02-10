@@ -177,7 +177,7 @@ group by c.nyape,c.nrocli
 
 --------------------------------------------------------------------------------------
 -- U) Aumentar un 10% el stock mínimo de los artículos del rubro 'Tornillos'
---
+--update public.articulos a set pto_reposicion=pto_reposicion+(pto_reposicion*0.1) where a.rubro=2
 --------------------------------------------------------------------------------------
 -- V) Agregar la columna color (alfabetico) a la tabla ARTICULOS
 --
