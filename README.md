@@ -146,16 +146,16 @@ WHERE A.stock<A.pto_reposicion
 --    de artículos facturados en la misma sea mayor al 5% del stock promedio
 --    de los rubros "Herramienta%"
 --    (Rsta: 5 FILAS)
---SELECT F.*,SUM (D.cantidad*D.preciouni) AS TOTAL_FACT,SUM (D.cantidad)AS TOTAL_CANT
-	FROM public.facturas F INNER JOIN public.detalles D ON F.nrofactura=D.nrofactura
-		INNER JOIN public.articulos A ON D.articulo=A.nroartic
-		INNER JOIN public.rubros R ON A.rubro=R.cod_rubro 
-	WHERE R.descripcion ILIKE 'HERRAMIENTA%' 
-	GROUP BY F.nrofactura
-	HAVING SUM (D.cantidad*D.preciouni)>200
-		AND (SUM (D.cantidad))>(SELECT (5*AVG(stock))/100
-					FROM public.articulos)
-NO ME DA RESULTADO
+--
+SELECT F.*,SUM (D.cantidad*D.preciouni) AS TOTAL_FACT,SUM (D.cantidad)AS TOTAL_CANT 
+FROM public.facturas F INNER JOIN public.detalles D ON F.nrofactura=D.nrofactura 
+	INNER JOIN public.articulos A ON D.articulo=A.nroartic 
+	INNER JOIN public.rubros R ON A.rubro=R.cod_rubro 
+GROUP BY F.nrofactura 
+HAVING SUM (D.cantidad*D.preciouni)>200 
+	AND (SUM (D.cantidad))>(SELECT (AVG(a.stock))*0.05 
+				FROM public.articulos a inner join public.rubros r on A.rubro=R.cod_rubro
+				where R.descripcion ILIKE 'HERRAMIENTA%')
 --------------------------------------------------------------------------------------
 -- T) a) Listar los clientes compraron TODOS los articulos (1 fila - cliente 109)
 --    b) Listar los clientes que en Junio compraron TODOS los articulos del rubro
