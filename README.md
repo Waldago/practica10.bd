@@ -29,9 +29,11 @@ SELECT * FROM CLIENTES WHERE SALDOCLI>0 AND localidad ILIKE '%CAPITAL%' OR LOCAL
 -- E) Averiguar la cantidad de cada uno de los artículos vendidos durante
 --    marzo del 2010, ordenado segun la cantidad vendida.
 --    (Rsta: 13 FILAS)
-SELECT  D.ARTICULO, SUM(D.CANTIDAD) FROM DETALLES D, FACTURAS F 
-WHERE D.NROFACTURA = F.NROFACTURA AND F.FECHA BETWEEN '01-03-2010' AND '31-03-2010'
-GROUP BY D.ARTICULO
+SELECT a.descripcion, SUM(D.CANTIDAD) 
+FROM DETALLES D inner join FACTURAS F on D.NROFACTURA = F.NROFACTURA
+	inner join articulos a on d.articulo=a.nroartic
+WHERE F.FECHA BETWEEN '01-03-2010' AND '31-03-2010' 
+GROUP BY a.descripcion
 --------------------------------------------------------------------------------------
 -- F) Hallar los importes totales día a día durante abril del 2010, ordenados en
 --    forma decreciente. (Rsta: 5 filas)
