@@ -193,7 +193,18 @@ group by c.nyape,c.nrocli
 --    rubro 'Articulos de Electricidad' durante mayo de año 2010.
 --    Ordenar los datos en forma descendente por nombre y apellido.
 --    (Rsta: 10 filas)
---
+--SELECT DISTINCT C.*
+FROM public.clientes C 
+WHERE C.LOCALIDAD ILIKE 'CAP%'
+	AND NOT EXISTS(SELECT C.*
+				FROM public.clientes C2 INNER JOIN public.facturas F2 ON C2.NROCLI=F2.CLIENTE
+					INNER JOIN public.detalles D2 ON F2.NROFACTURA=D2.NROFACTURA
+					INNER JOIN public.articulos A2 ON D2.ARTICULO=A2.NROARTIC
+					INNER JOIN public.rubros R ON A2.RUBRO=R.COD_RUBRO
+				WHERE R.DESCRIPCION ILIKE 'ARTICULOS DE ELECTRICIDAD'
+					AND F2.FECHA BETWEEN '01/05/2010' AND '31/05/2010'
+					AND C2.NROCLI=C.NROCLI)
+ORDER BY C.NYAPE
 --------------------------------------------------------------------------------------
 -- Z) Listar los rubros (y la cantidad de articulos vendidos) de cada rubro que haya
 --    vendido mas de 30 articulos.
