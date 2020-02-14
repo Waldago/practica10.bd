@@ -187,7 +187,7 @@ having count (a.nroartic)=(select count (a.nroartic)
 --update public.articulos a set pto_reposicion=pto_reposicion+(pto_reposicion*0.1) where a.rubro=2
 --------------------------------------------------------------------------------------
 -- V) Agregar la columna color (alfabetico) a la tabla ARTICULOS
---
+-- alter table public.articulos add column color varchar;
 --------------------------------------------------------------------------------------
 -- W) Dar permisos de lectura y actualizacion a los usuarios 'SIST' y 'ADMIN'
 --    sobre la tabla ARTICULOS
@@ -215,7 +215,11 @@ ORDER BY C.NYAPE
 --------------------------------------------------------------------------------------
 -- Z) Listar los rubros (y la cantidad de articulos vendidos) de cada rubro que haya
 --    vendido mas de 30 articulos.
---
+-- select r.descripcion, sum (d.cantidad)
+from public.detalles d inner join public.articulos a on d.articulo=a.nroartic
+	inner join public.rubros r on a.rubro=r.cod_rubro
+group by r.descripcion
+having sum (d.cantidad) > 30
 --------------------------------------------------------------------------------------
 -- 1) Generar una view, FACT-CAB (Nrofactura, Cliente, Fecha, TOTAL)
 
@@ -237,5 +241,11 @@ ORDER BY C.NYAPE
 --------------------------------------------------------------------------------------
 -- 5) Listar las localidades que vendieron mas de que lo que se le facturo al cliente 179
 
---
+--select c.localidad
+from public.detalles d inner join public.facturas f on d.nrofactura=f.nrofactura
+	inner join public.clientes c on f.cliente=c.nrocli
+group by c.localidad
+having sum (d.cantidad*d.preciouni)>(select sum(d2.cantidad*d2.preciouni)
+					from public.detalles d2 inner join public.facturas f2 on d2.nrofactura=f2.nrofactura
+						where f2.cliente=179)
 --------------------------------------- Fin Practica10 --------------------------------
