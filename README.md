@@ -171,12 +171,16 @@ group by c.nyape
 having count (distinct nroartic)=(select count(distinct nroartic)
 from public.articulos)
 b)select c.nyape,c.nrocli
-from public.clientes c inner join public.facturas f on c.nrocli=f.cliente
-	inner join public.detalles d on d.nrofactura=f.nrofactura
-	inner join public.articulos a on d.articulo=a.nroartic
-	inner join public.rubros r on a.rubro=r.cod_rubro
-where r.descripcion ilike 'tornillos' and f.fecha between '01/06/2010' and '30/06/2010'
+from public.clientes c inner join public.facturas f on c.nrocli=f.cliente 
+	inner join public.detalles d on d.nrofactura=f.nrofactura 
+	inner join public.articulos a on d.articulo=a.nroartic 
+	inner join public.rubros r on a.rubro=r.cod_rubro 
+where r.descripcion ilike 'tornillos' 
+	and f.fecha between '01/06/2010' and '30/06/2010'
 group by c.nyape,c.nrocli
+having count (a.nroartic)=(select count (a.nroartic)
+		from public.articulos a inner join public.rubros r on a.rubro=r.cod_rubro
+			where r.descripcion ilike 'tornillos')
 
 --------------------------------------------------------------------------------------
 -- U) Aumentar un 10% el stock mínimo de los artículos del rubro 'Tornillos'
