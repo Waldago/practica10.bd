@@ -233,11 +233,16 @@ having sum (d.cantidad) > 30
 -- 3) Generar un unico Select con el o los articulos mas caros y con el o los mas baratos
 
 
---
+--SELECT MAX(PRECIOUNI),MIN(PRECIOUNI)
+FROM DETALLES
 --------------------------------------------------------------------------------------
 -- 4) Listar los datos de los clientes que no compraron ningun articulo
 
---
+--SELECT C.*
+FROM CLIENTES C
+WHERE C.NROCLI NOT IN(SELECT C.NROCLI
+			FROM CLIENTES C2 JOIN FACTURAS F ON C2.NROCLI=F.CLIENTE
+				WHERE C.NROCLI=C2.NROCLI)
 --------------------------------------------------------------------------------------
 -- 5) Listar las localidades que vendieron mas de que lo que se le facturo al cliente 179
 
