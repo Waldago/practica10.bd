@@ -12,7 +12,10 @@
 --------------------------------------------------------------------------------------
 -- A) Hallar los clientes deudores ordenado en forma alfabetica
 --
-SELECT * FROM CLIENTES WHERE SALDOCLI>0
+SELECT * 
+FROM CLIENTES 
+WHERE SALDOCLI>0
+ORDER BY NYAPE
 --------------------------------------------------------------------------------------
 -- B) Hallar los articulos que se deberían reponer
 --
@@ -41,6 +44,7 @@ order by SUM(D.CANTIDAD)
 SELECT F.FECHA,SUM(D.CANTIDAD*D.PRECIOUNI) FROM DETALLES D, FACTURAS F
 WHERE D.NROFACTURA = F.NROFACTURA AND F.FECHA BETWEEN '01-04-2010' AND '30-04-2010'
 GROUP BY F.FECHA
+ORDER BY SUM(D.CANTIDAD*D.PRECIOUNI) DESC
 --------------------------------------------------------------------------------------
 -- G) Obtener las fechas en las que se hayan vendido más de $200.- (Rsta: filas 9)
 --
