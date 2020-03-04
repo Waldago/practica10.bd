@@ -53,11 +53,22 @@ WHERE D.NROFACTURA = F.NROFACTURA GROUP BY F.FECHA HAVING SUM(D.CANTIDAD*D.PRECI
 --------------------------------------------------------------------------------------
 -- H) Obtener las fechas en las que mas se facturo
 --    (2010-03-17 - $429)
--- select f.fecha,sum (d.cantidad*d.preciouni) as suma
+-- 
+select f.fecha,sum (d.cantidad*d.preciouni) as suma
 	from detalles d join facturas f on d.nrofactura=f.nrofactura
 	group by f.fecha
 	order by suma desc
 	limit 1
+
+o 
+
+select sum (d.cantidad*d.preciouni) as total, f.fecha as fechas
+from facturas f inner join detalles d on f.nrofactura=d.nrofactura
+group by f.fecha
+having sum (d.cantidad*d.preciouni) = (select max(total)
+from (select sum (d.cantidad*d.preciouni) as total, f.fecha as fechas
+from facturas f inner join detalles d on f.nrofactura=d.nrofactura
+group by f.fecha) as totales)
 --------------------------------------------------------------------------------------
 -- I A) Averiguar los rubros con movimientos del 15 al 30 de Abril del 2010 (Rsta: 3 filas)
 --select distinct r.descripcion as nom_rubro
